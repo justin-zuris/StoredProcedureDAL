@@ -13,8 +13,8 @@ namespace Zuris.SPDAL.SqlServer
             {
                 var sex = ex as SqlException;
                 var sqlErrorCodesToRetry = new[]
-			    {
-				    -2 /*Timeout expired. The timeout period elapsed prior to completion of the operation or the server is not responding.*/
+                {
+                    -2 /*Timeout expired. The timeout period elapsed prior to completion of the operation or the server is not responding.*/
 				    , 20 /*The instance of SQL Server you attempted to connect to does not support encryption. (PMcE: amazingly, this is transient)*/
 				    , 64 /*A connection was successfully established with the server, but then an error occurred during the login process.*/
 				    , 233 /*The client was unable to establish a connection because of an error during connection initialization process before login*/

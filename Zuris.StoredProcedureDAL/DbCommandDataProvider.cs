@@ -283,7 +283,7 @@ namespace Zuris.SPDAL
         public bool GetBoolean(string name)
         {
             var i = _currentReader.GetOrdinal(name);
-            if (_currentReader.IsDBNull(i)) 
+            if (_currentReader.IsDBNull(i))
                 return default(bool);
             else
             {

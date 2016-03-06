@@ -7,8 +7,7 @@ using System.Text;
 
 namespace Zuris.SPDAL.SqlServer
 {
-
-    public class SqlServerCommandLogHelper: IDbCommandLogHelper
+    public class SqlServerCommandLogHelper : IDbCommandLogHelper
     {
         private static SqlServerCommandLogHelper _instance;
         public static IDbCommandLogHelper Instance { get { _instance = _instance ?? new SqlServerCommandLogHelper(); return _instance; } }

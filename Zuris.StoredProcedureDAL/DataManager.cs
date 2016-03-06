@@ -75,7 +75,7 @@ namespace Zuris.SPDAL
         protected abstract IEvaluateRetryable RetryableExceptionPolicy { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public abstract IDbCommandLogHelper CommandLogHelper { get; }
 
@@ -560,6 +560,5 @@ namespace Zuris.SPDAL
         {
             ResetConnection(_primaryConnection);
         }
-        
     }
 }

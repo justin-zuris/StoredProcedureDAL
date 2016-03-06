@@ -60,13 +60,13 @@ namespace Zuris.SPDAL
         int ExecuteNonQuery(IDbCommand command);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         IMetaDataManager CreateMetaDataManager();
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         IDbCommandLogHelper CommandLogHelper { get; }
 

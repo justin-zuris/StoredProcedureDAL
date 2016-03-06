@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Zuris.SPDAL
 {
@@ -20,7 +17,6 @@ namespace Zuris.SPDAL
 }
 
 /*
-
 
     public class MetaDataManager : IMetaDataManager
     {

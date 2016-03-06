@@ -74,7 +74,7 @@ namespace Zuris
             TE t;
             if (Enum.TryParse<TE>(name, ignoreCase, out t))
                 return t;
-            else 
+            else
                 return null;
         }
 

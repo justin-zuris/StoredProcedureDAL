@@ -1,5 +1,4 @@
-﻿using Zuris.SPDAL;
-using System.Data;
+﻿using System.Data;
 
 namespace Zuris.SPDAL
 {
