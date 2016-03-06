@@ -33,5 +33,13 @@ namespace Zuris.SPDAL
         decimal GetDecimal(string name);
 
         decimal? GetDecimalNullable(string name);
+
+        Guid GetGuid(string name);
+
+        Guid? GetGuidNullable(string name);
+
+        double GetDouble(string name);
+
+        double? GetDoubleNullable(string name);
     }
 }

@@ -379,6 +379,28 @@ namespace Zuris.SPDAL
             return _currentReader.IsDBNull(_currentReader.GetOrdinal(name)) ? (decimal?)null : GetDecimal(name);
         }
 
+        public Guid GetGuid(string name)
+        {
+            var i = _currentReader.GetOrdinal(name);
+            return _currentReader.IsDBNull(i) ? default(Guid) : _currentReader.GetGuid(i);
+        }
+
+        public Guid? GetGuidNullable(string name)
+        {
+            return _currentReader.IsDBNull(_currentReader.GetOrdinal(name)) ? (Guid?)null : GetGuid(name);
+        }
+
+        public double GetDouble(string name)
+        {
+            var i = _currentReader.GetOrdinal(name);
+            return _currentReader.IsDBNull(i) ? default(double) : _currentReader.GetDouble(i);
+        }
+
+        public double? GetDoubleNullable(string name)
+        {
+            return _currentReader.IsDBNull(_currentReader.GetOrdinal(name)) ? (double?)null : GetDouble(name);
+        }
+
         #endregion Strongly typed _currentReader accessors
     }
 }
