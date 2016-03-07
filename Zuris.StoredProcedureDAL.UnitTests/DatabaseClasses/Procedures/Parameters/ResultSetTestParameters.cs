@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zuris.SPDAL.SqlServer;
+﻿using System.Data;
 
 namespace Zuris.SPDAL.UnitTests
 {
