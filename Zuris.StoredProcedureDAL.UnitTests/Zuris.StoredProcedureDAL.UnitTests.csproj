@@ -51,8 +51,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="SingleResultSetTest.cs" />
-    <Compile Include="MultiResultSetTest.cs" />
+    <Compile Include="DatabaseClasses\Procedures\SingleResultSetTest.cs" />
+    <Compile Include="DatabaseClasses\Procedures\MultiResultSetTest.cs" />
     <Compile Include="DatabaseClasses\Procedures\ResultSets\SecondResultSetRecord.cs" />
     <Compile Include="DatabaseClasses\Procedures\ResultSets\FirstResultSetRecord.cs" />
     <Compile Include="FrameworkTests.cs" />
