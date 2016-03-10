@@ -51,6 +51,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DatabaseClasses\Procedures\Parameters\TableAndXmlParameters.cs" />
+    <Compile Include="DatabaseClasses\Procedures\Parameters\ResultSetTestParametersSimple.cs" />
+    <Compile Include="DatabaseClasses\Procedures\ResultSets\CountryAndXml.cs" />
+    <Compile Include="DatabaseClasses\Procedures\TableAndXmlParamTest.cs" />
     <Compile Include="DatabaseClasses\Procedures\SingleResultSetTest.cs" />
     <Compile Include="DatabaseClasses\Procedures\MultiResultSetTest.cs" />
     <Compile Include="DatabaseClasses\Procedures\ResultSets\SecondResultSetRecord.cs" />
@@ -70,6 +74,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Sql\dbo.__ExecuteNonQueryWithOptionalError.sql" />
+    <Content Include="Sql\dbo.__ProcWithTableAndXmlParams.sql" />
+    <Content Include="Sql\dbo.__ProcWithOutputParam.sql" />
     <Content Include="Sql\dbo.__SingleResultSetTest.sql" />
     <Content Include="Sql\dbo.__ScalarProcWithSelect.sql" />
     <Content Include="Sql\dbo.__ScalarProcWithReturn.sql" />

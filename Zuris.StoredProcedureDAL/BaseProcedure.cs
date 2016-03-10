@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Linq;
 
 namespace Zuris.SPDAL
 {
@@ -82,6 +83,16 @@ namespace Zuris.SPDAL
             return _cdp.ExecuteIntoDataSet(CommandType.StoredProcedure, Name, QueryParameters);
         }
 
+        protected virtual void AutoBindRecord<T>(T record, IRecordDataExtractor rde)
+        {
+            var type = typeof(T);
+            foreach (var prop in type.GetProperties().Where(p => p.CanWrite && p.CanRead))
+            {
+                var objValue = ConvertToType(prop.PropertyType, rde.GetObject(prop.Name));
+                prop.SetValue(record, objValue, new object[] { });
+            }
+        }
+
         protected virtual void Execute<T>(Func<T, bool> onRecordReadContinue, Action<T, IRecordDataExtractor> bindObject) where T : new()
         {
             _cdp.Execute<T>(CommandType.StoredProcedure, Name, QueryParameters, onRecordReadContinue, bindObject);
@@ -104,19 +115,22 @@ namespace Zuris.SPDAL
 
         protected static object ConvertToType(Type type, object o)
         {
-            object data = type.IsValueType ? Activator.CreateInstance(type) : null;
-            if (data != null && !Convert.IsDBNull(data))
+            object data = o;
+            if (o == null || o.GetType() != type)
             {
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                data = type.IsValueType ? Activator.CreateInstance(type) : null;
+                if (data != null && !Convert.IsDBNull(data))
                 {
-                    type = Nullable.GetUnderlyingType(type);
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
+                        type = Nullable.GetUnderlyingType(type);
+                    }
+
+                    // add special cases here (int to boolean, etc)
+
+                    data = Convert.ChangeType(o, type);
                 }
-
-                // add special cases here (int to boolean, etc)
-
-                data = Convert.ChangeType(o, type);
             }
-
             return data;
         }
 

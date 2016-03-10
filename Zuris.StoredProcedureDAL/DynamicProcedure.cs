@@ -1,4 +1,7 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Reflection;
 
 namespace Zuris.SPDAL
 {
@@ -29,6 +32,30 @@ namespace Zuris.SPDAL
         public override CommandType CommandType
         {
             get { return _commandType; }
+        }
+        
+        public T ExecuteIntoRecord<T>() where T : new()
+        {
+            T o = default(T);
+            Execute<T>((record) => { o = record; return false; }, (record, rde) => { AutoBindRecord(record, rde); });
+            return o;
+        }
+
+        public List<T> ExecuteIntoList<T>() where T : new()
+        {
+            var l = new List<T>();
+            Execute<T>((record) => { l.Add(record); return true; }, (record, rde) => { AutoBindRecord(record, rde); });
+            return l;
+        }
+
+        protected virtual void AutoBindRecord<T>(T record, IRecordDataExtractor rde)
+        {
+            var type = typeof(T);
+            foreach (var prop in type.GetProperties().Where(p => p.CanWrite && p.CanRead))
+            {
+                var objValue = ConvertToType(prop.PropertyType, rde.GetObject(prop.Name));
+                prop.SetValue(record, objValue, new object[] { });
+            }
         }
     }
 }

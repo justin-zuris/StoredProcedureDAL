@@ -396,26 +396,6 @@ namespace Zuris
             }
         }
 
-        public static void AppendIfExists(this StringBuilder sb, string targetString, bool addPrefixPadding = true, string paddingString = " ")
-        {
-            if (!String.IsNullOrEmpty(targetString))
-            {
-                if (addPrefixPadding)
-                {
-                    sb.Append(paddingString);
-                }
-                sb.Append(targetString);
-            }
-        }
-
-        public static void AddIfNotNull<K>(this BindingList<K> list, K k)
-        {
-            if (k != null)
-            {
-                list.Add(k);
-            }
-        }
-
         public static string ToEnumDescription<T>(this T val) where T : struct
         {
             var type = typeof(T);

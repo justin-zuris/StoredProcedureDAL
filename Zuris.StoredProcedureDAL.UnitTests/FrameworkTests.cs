@@ -1,17 +1,74 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 
 namespace Zuris.SPDAL.UnitTests
 {
     [TestClass]
     public class FrameworkTests
     {
+        public const string ConnectionString = "Data Source=.;Initial Catalog=TestingForRob;Integrated Security=True;MultipleActiveResultSets=True";
+
+        [TestMethod]
+        public void TestTableAndXmlParametersProcedure()
+        {
+            using (var dataManager = new SampleDataManager(ConnectionString))
+            {
+                var cdp = new SampleCommandDataProvider(dataManager);
+
+                var countries = new DataTable();
+                countries.Columns.Add("Code"); countries.Columns.Add("Name");
+                var row = countries.NewRow(); row["Code"] = "US"; row["Name"] = "United States"; countries.Rows.Add(row);
+                row = countries.NewRow(); row["Code"] = "CA"; row["Name"] = "Canada"; countries.Rows.Add(row);
+
+                var tblXmlCmd = new TableAndXmlParamTest(cdp);
+                tblXmlCmd.Parameters.Countries.Value = countries;
+                tblXmlCmd.Parameters.Xml.Value = "<stuff><x>Language</x><x>Endglish</x></stuff>";
+                var results = tblXmlCmd.ExecuteIntoList();
+
+                foreach (var record in results)
+                {
+                    System.Console.WriteLine(new StringBuilder()
+                        .Append(record.Code).Append(", ")
+                        .Append(record.Name).Append(", ")
+                        .Append(record.MyXml));
+                }
+            }
+        }
+
+        [TestMethod]
+        public void TestDynamicTableAndXmlParametersProcedure()
+        {
+            using (var dataManager = new SampleDataManager(ConnectionString))
+            {
+                var cdp = new SampleCommandDataProvider(dataManager);
+
+                var countries = new DataTable();
+                countries.Columns.Add("Code"); countries.Columns.Add("Name");
+                var row = countries.NewRow(); row["Code"] = "US"; row["Name"] = "United States"; countries.Rows.Add(row);
+                row = countries.NewRow(); row["Code"] = "CA"; row["Name"] = "Canada"; countries.Rows.Add(row);
+
+                var dynamicCmd = new DynamicProcedure(cdp, CommandType.StoredProcedure, "dbo.__ProcWithTableAndXmlParams");
+                dynamicCmd.Parameters.Add("@countries", countries);
+                dynamicCmd.Parameters.Add("@xml", "<stuff><x>Language</x><x>Endglish</x></stuff>", DbType.Xml);
+                
+                var results = dynamicCmd.ExecuteIntoList<CountryAndXml>();
+
+                foreach (var record in results)
+                {
+                    System.Console.WriteLine(new StringBuilder()
+                        .Append(record.Code).Append(", ")
+                        .Append(record.Name).Append(", ")
+                        .Append(record.MyXml));
+                }
+            }
+        }
+
         [TestMethod]
         public void TestSingleResultSetProcedure()
         {
-            string connectionString = "Data Source=.;Initial Catalog=TestingForRob;Integrated Security=True;MultipleActiveResultSets=True";
-            using (var dataManager = new SampleDataManager(connectionString))
+            using (var dataManager = new SampleDataManager(ConnectionString))
             {
                 var cdp = new SampleCommandDataProvider(dataManager);
 
@@ -31,7 +88,7 @@ namespace Zuris.SPDAL.UnitTests
         {
             // The dataManager is a class that you override, one for each database you have. If you have 2 databases, you would have 2 implementations of DataManager. 
             // This is a custom datamanager class that takes the connection string in the constructor.
-            using (var dataManager = new SampleDataManager("Data Source=.;Initial Catalog=TestingForRob;Integrated Security=True;MultipleActiveResultSets=True"))
+            using (var dataManager = new SampleDataManager(ConnectionString))
             {
                 // The ICommandDataProvider is a database indepenant interface (no requirement on databases in contract). This is the one we use for ADO.Net database access. 
                 // I have used a custom implmenetation of this class that calls special web services that make proc calls. It would take the results (serialized datasets) and make 

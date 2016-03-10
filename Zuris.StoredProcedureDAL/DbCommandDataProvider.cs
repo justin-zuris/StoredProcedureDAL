@@ -206,10 +206,15 @@ namespace Zuris.SPDAL
                 if (param.Size > 0) p.Size = param.Size;
                 if (param.Precision > 0) p.Precision = Convert.ToByte(param.Precision);
                 if (param.Scale > 0) p.Scale = Convert.ToByte(param.Scale);
+
+                CustomizeDatabaseSpecificParameter(command, param, p);
+
                 command.Parameters.Add(p);
             }
             return p;
         }
+
+        protected virtual void CustomizeDatabaseSpecificParameter(IDbCommand command, IObjectQueryParam queryParam, IDbDataParameter p) { }
 
         protected virtual void UpdateOutputParameters(IDbCommand command, IParameterGroup parameters)
         {
@@ -399,6 +404,14 @@ namespace Zuris.SPDAL
         public double? GetDoubleNullable(string name)
         {
             return _currentReader.IsDBNull(_currentReader.GetOrdinal(name)) ? (double?)null : GetDouble(name);
+        }
+
+        public object GetObject(string name)
+        {
+            var i = _currentReader.GetOrdinal(name);
+            if (i >= 0)
+                return _currentReader.GetValue(i);
+            else return null;
         }
 
         #endregion Strongly typed _currentReader accessors

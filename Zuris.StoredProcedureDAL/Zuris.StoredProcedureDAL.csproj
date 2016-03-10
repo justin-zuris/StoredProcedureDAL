@@ -77,6 +77,7 @@
     <Compile Include="QueryParam.cs" />
     <Compile Include="RecordSetProcedure.cs" />
     <Compile Include="RecordSetProcedure.X.cs" />
+    <Compile Include="SqlServer\SqlServerCommandDataProvider.cs" />
     <Compile Include="SqlServer\SqlServerDataManager.cs" />
     <Compile Include="SqlServer\SqlServerEvaluateRetryable.cs" />
     <Compile Include="SqlServer\SqlServerMetaDataManager.cs" />

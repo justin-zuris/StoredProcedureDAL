@@ -90,7 +90,7 @@ namespace Zuris.SPDAL
 
     public static class QueryParam
     {
-        public static int Compare<T>(QueryParam<T> n1, QueryParam<T> n2) where T : struct
+        public static int Compare<T>(QueryParam<T> n1, QueryParam<T> n2)
         {
             if (n1.HasValue)
             {
@@ -101,7 +101,7 @@ namespace Zuris.SPDAL
             return 0;
         }
 
-        public static bool Equals<T>(QueryParam<T> n1, QueryParam<T> n2) where T : struct
+        public static bool Equals<T>(QueryParam<T> n1, QueryParam<T> n2)
         {
             if (n1.HasValue)
             {

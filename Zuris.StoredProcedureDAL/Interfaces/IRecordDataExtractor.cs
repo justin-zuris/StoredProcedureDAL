@@ -4,6 +4,8 @@ namespace Zuris.SPDAL
 {
     public interface IRecordDataExtractor
     {
+        object GetObject(string name);
+
         string GetString(string name);
 
         DateTime GetDateTime(string name);
