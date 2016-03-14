@@ -8,6 +8,7 @@ AS
 begin
 	select @id + 100;
 end
-GO
-
+/*
 exec dbo.__ScalarProcWithSelect 
+*/
+GO

@@ -17,9 +17,10 @@ begin
 	end
 
 end
-GO
-
+/*
 declare @returnValue int
 exec @returnValue = dbo.__ExecuteNonQueryWithOptionalError
 
 select @returnValue
+*/
+GO

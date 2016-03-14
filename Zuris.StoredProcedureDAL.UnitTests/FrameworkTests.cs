@@ -1,7 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using System.Text;
+using System.Linq;
+using System;
+using System.IO;
 
 namespace Zuris.SPDAL.UnitTests
 {
@@ -9,6 +13,20 @@ namespace Zuris.SPDAL.UnitTests
     public class FrameworkTests
     {
         public const string ConnectionString = "Data Source=.;Initial Catalog=TestingForRob;Integrated Security=True;MultipleActiveResultSets=True";
+
+        [ClassInitialize]
+        public static void Init(TestContext context)
+        {
+            AddProcedures("__ProcWithTableAndXmlParams", "__MultiResultSetTest", "__ProcWithOutputParam", "__SingleResultSetTest",
+                "__ExecuteNonQueryWithOptionalError", "__ScalarProcWithReturn", "__ScalarProcWithSelect");
+        }
+
+        [ClassCleanup]
+        public static void Finalize()
+        {
+            DropProcedures("__ProcWithTableAndXmlParams");
+            DropTableTypes("__CountryType");
+        }
 
         [TestMethod]
         public void TestTableAndXmlParametersProcedure()
@@ -24,12 +42,12 @@ namespace Zuris.SPDAL.UnitTests
 
                 var tblXmlCmd = new TableAndXmlParamTest(cdp);
                 tblXmlCmd.Parameters.Countries.Value = countries;
-                tblXmlCmd.Parameters.Xml.Value = "<stuff><x>Language</x><x>Endglish</x></stuff>";
+                tblXmlCmd.Parameters.Xml.Value = "<stuff><x>Language</x><x>English</x></stuff>";
                 var results = tblXmlCmd.ExecuteIntoList();
 
                 foreach (var record in results)
                 {
-                    System.Console.WriteLine(new StringBuilder()
+                    Console.WriteLine(new StringBuilder()
                         .Append(record.Code).Append(", ")
                         .Append(record.Name).Append(", ")
                         .Append(record.MyXml));
@@ -84,6 +102,41 @@ namespace Zuris.SPDAL.UnitTests
         }
 
         [TestMethod]
+        public void TestScalarWithSelectProcedure()
+        {
+            using (var dataManager = new SampleDataManager(ConnectionString))
+            {
+                var cdp = new SampleCommandDataProvider(dataManager);
+
+                var resultSetCommand = new ScalarWithSelect(cdp);
+                resultSetCommand.Parameters.Id.Value = 1234;
+                var returnValue = resultSetCommand.ExecuteScalar<int>();
+
+                // This works too, but it executes into a dataset and pulls the first value
+                //var returnValue = resultSetCommand.ExecuteScalarFromResultSet<int>();
+
+                Assert.AreEqual(returnValue, 1234 + 100);
+            }
+        }
+
+        [TestMethod]
+        public void TestScalarWithReturnProcedure()
+        {
+            using (var dataManager = new SampleDataManager(ConnectionString))
+            {
+                var cdp = new SampleCommandDataProvider(dataManager);
+
+                var resultSetCommand = new ScalarWithReturn(cdp);
+                resultSetCommand.Parameters.Id.Value = 1234;
+                resultSetCommand.ExecuteNonQuery();
+
+                var returnValue = resultSetCommand.Parameters.ReturnValue.Value;
+
+                Assert.AreEqual(returnValue, 1234 + 100);
+            }
+        }
+
+        [TestMethod]
         public void TestMultiResultSetProcedure()
         {
             // The dataManager is a class that you override, one for each database you have. If you have 2 databases, you would have 2 implementations of DataManager. 
@@ -124,6 +177,66 @@ namespace Zuris.SPDAL.UnitTests
                     {
                         System.Console.WriteLine("DataSet::" + dt.TableName + "::" + row[0]);
                     }
+                }
+            }
+        }
+
+        private static void AddProcedures(params string[] procedureNames)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var procResources = assembly.GetManifestResourceNames().Where(r => r.StartsWith("Zuris.SPDAL.UnitTests.Sql") && procedureNames.Any(pn => r.EndsWith(pn + ".sql"))).ToList();
+            foreach (var resourceName in procResources)
+            {
+                using (var dataManager = new SampleDataManager(ConnectionString))
+                {
+                    string sql;
+                    using (var procStream = assembly.GetManifestResourceStream(resourceName))
+                    using (var reader = new StreamReader(procStream))
+                    {
+                        sql = reader.ReadToEnd();
+                    }
+
+                    foreach (var commandSql in sql.Split(new string[] { "\r\nGO", "\r\ngo" }, StringSplitOptions.RemoveEmptyEntries).Where(s => !string.IsNullOrWhiteSpace(s)))
+                    {
+                        var cmd = dataManager.CreateCommand();
+                        cmd.CommandText = commandSql.Trim();
+                        dataManager.ExecuteNonQuery(cmd);
+                        Console.WriteLine("Added " + resourceName);
+                    }
+                }
+            }
+        }
+        private static void DropProcedures(params string[] procedureNames)
+        {
+            foreach (var procedureName in procedureNames)
+            {
+                string dropSql =
+@"IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[" + procedureName + @"]') AND type IN ( N'P', N'PC' )) 
+	drop procedure [dbo].[" + procedureName + @"];";
+
+                using (var dataManager = new SampleDataManager(ConnectionString))
+                {
+                    var cmd = dataManager.CreateCommand();
+                    cmd.CommandText = dropSql;
+                    dataManager.ExecuteNonQuery(cmd);
+                    Console.WriteLine("Dropped " + procedureName);
+                }
+            }
+        }
+        private static void DropTableTypes(params string[] tableTypes)
+        {
+            foreach (var tableType in tableTypes)
+            {
+                string dropSql =
+@"IF not EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = '"+ tableType+@"') 
+	drop type [dbo].[" + tableType + @"];";
+
+                using (var dataManager = new SampleDataManager(ConnectionString))
+                {
+                    var cmd = dataManager.CreateCommand();
+                    cmd.CommandText = dropSql;
+                    dataManager.ExecuteNonQuery(cmd);
+                    Console.WriteLine("Dropped " + tableType);
                 }
             }
         }

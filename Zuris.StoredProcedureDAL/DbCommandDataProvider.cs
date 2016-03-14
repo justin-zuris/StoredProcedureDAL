@@ -135,7 +135,7 @@ namespace Zuris.SPDAL
             {
                 command.CommandType = commandType;
                 command.CommandText = commandText;
-
+                
                 AddParameters(command, parameters);
                 if (CommandLoggingEnabled)
                 {
@@ -192,9 +192,9 @@ namespace Zuris.SPDAL
         protected virtual IDbDataParameter AddParameter(IDbCommand command, IObjectQueryParam param)
         {
             IDbDataParameter p = null;
-            if (param.IsActivated || param.Direction == ParameterDirection.Output)
+            if (param.IsActivated || param.Direction == ParameterDirection.Output || param.Direction == ParameterDirection.ReturnValue)
             {
-                if (!param.IsActivated && param.Direction == ParameterDirection.Output)
+                if (!param.IsActivated && (param.Direction == ParameterDirection.Output || param.Direction == ParameterDirection.ReturnValue))
                     param.ObjectValue = null;
 
                 object value = param.ObjectValue ?? DBNull.Value;

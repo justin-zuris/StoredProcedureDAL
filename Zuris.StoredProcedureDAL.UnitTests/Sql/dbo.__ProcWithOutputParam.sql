@@ -10,10 +10,11 @@ begin
 	set @outputId = newid()
 	select @id + 100;
 end
-GO
-
+/*
 declare @id int = 12;
 declare @outputId uniqueidentifier
 exec dbo.__ProcWithOutputParam @id, @outputId output
 
 select @outputId
+*/
+GO

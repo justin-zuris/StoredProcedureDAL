@@ -9,7 +9,7 @@
         {
         }
 
-        public override string CommandText { get { return "[dbo].[__ProcWithTableAndXmlParams]"; } }
+        public override string CommandText { get { return PROCEDURE_NAME; } }
 
         protected override void BindRecord(CountryAndXml record, IRecordDataExtractor rde)
         {

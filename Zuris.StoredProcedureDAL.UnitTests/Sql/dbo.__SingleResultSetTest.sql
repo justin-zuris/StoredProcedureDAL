@@ -17,6 +17,7 @@ begin
 	union
 	select @id+2, 'Crapola Smith', 1, 99.98, newid(), checksum(@id+2, @name, @enabled, @cost);
 end
-GO
-
+/*
 exec dbo.__SingleResultSetTest
+*/
+GO

@@ -27,6 +27,7 @@ begin
 
 	select * from @resultSet2;
 end
-GO
-
+/*
 exec dbo.__MultiResultSetTest
+*/
+GO

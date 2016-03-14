@@ -8,9 +8,10 @@ AS
 begin
 	return @id + 100;
 end
-GO
-
+/*
 declare @RETURN_VALUE int;
 exec @RETURN_VALUE = dbo.__ScalarProcWithReturn 
 
 select @RETURN_VALUE
+*/
+GO

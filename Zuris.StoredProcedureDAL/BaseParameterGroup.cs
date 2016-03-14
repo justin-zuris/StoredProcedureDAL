@@ -30,7 +30,7 @@ namespace Zuris.SPDAL
         {
             get
             {
-                return QueryParameters.Where(qp => qp.Direction == ParameterDirection.Output || qp.Direction == ParameterDirection.InputOutput).ToList();
+                return QueryParameters.Where(qp => qp.Direction == ParameterDirection.Output || qp.Direction == ParameterDirection.InputOutput || qp.Direction == ParameterDirection.ReturnValue).ToList();
             }
         }
     }

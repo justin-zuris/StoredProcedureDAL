@@ -51,9 +51,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DatabaseClasses\Procedures\Parameters\ScalarWithReturnTestParameters.cs" />
+    <Compile Include="DatabaseClasses\Procedures\Parameters\ScalarTestParameters.cs" />
     <Compile Include="DatabaseClasses\Procedures\Parameters\TableAndXmlParameters.cs" />
     <Compile Include="DatabaseClasses\Procedures\Parameters\ResultSetTestParametersSimple.cs" />
     <Compile Include="DatabaseClasses\Procedures\ResultSets\CountryAndXml.cs" />
+    <Compile Include="DatabaseClasses\Procedures\ScalarWithSelect.cs" />
+    <Compile Include="DatabaseClasses\Procedures\ScalarWithReturn.cs" />
     <Compile Include="DatabaseClasses\Procedures\TableAndXmlParamTest.cs" />
     <Compile Include="DatabaseClasses\Procedures\SingleResultSetTest.cs" />
     <Compile Include="DatabaseClasses\Procedures\MultiResultSetTest.cs" />
@@ -73,13 +77,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Sql\dbo.__ExecuteNonQueryWithOptionalError.sql" />
-    <Content Include="Sql\dbo.__ProcWithTableAndXmlParams.sql" />
-    <Content Include="Sql\dbo.__ProcWithOutputParam.sql" />
-    <Content Include="Sql\dbo.__SingleResultSetTest.sql" />
-    <Content Include="Sql\dbo.__ScalarProcWithSelect.sql" />
-    <Content Include="Sql\dbo.__ScalarProcWithReturn.sql" />
-    <Content Include="Sql\dbo.__MultiResultSetTest.sql" />
+    <EmbeddedResource Include="Sql\dbo.__ExecuteNonQueryWithOptionalError.sql" />
+    <EmbeddedResource Include="Sql\dbo.__ProcWithTableAndXmlParams.sql" />
+    <EmbeddedResource Include="Sql\dbo.__ProcWithOutputParam.sql" />
+    <EmbeddedResource Include="Sql\dbo.__SingleResultSetTest.sql" />
+    <EmbeddedResource Include="Sql\dbo.__ScalarProcWithSelect.sql" />
+    <EmbeddedResource Include="Sql\dbo.__ScalarProcWithReturn.sql" />
+    <EmbeddedResource Include="Sql\dbo.__MultiResultSetTest.sql" />
   </ItemGroup>
   <ItemGroup />
   <Choose>
